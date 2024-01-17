@@ -1,8 +1,8 @@
 # ROS node for MultiWii / Cleanflight flight controllers
 
-## Dependency
+Dependency:
 ```
-https://github.com/christianrauch/msp
+https://github.com/UTAT-ADR/msp
 ```
 
 This ROS nodes uses the MultiWii Serial Protocol (MSP) to communicate with [MultiWii](http://www.multiwii.com/wiki/index.php?title=Main_Page) and [Cleanflight](http://cleanflight.com/) based flight controllers.
