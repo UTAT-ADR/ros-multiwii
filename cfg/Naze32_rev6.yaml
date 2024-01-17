@@ -10,3 +10,5 @@ gyro_unit: 0.244140625 # := 1/4.096
 # HMC5983 default gain: 1090 LSb/Gauss = 0.92 mG/LSb
 # 1 unit = 0.92 mGs = 0.92/1000 Gs = 100*0.92/1000 uT = 0.92/10 uT
 magn_gain: 0.092
+
+/multiwii/MSP_RAW_IMU: 1300

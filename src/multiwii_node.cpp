@@ -27,6 +27,8 @@
 #include <msp/FlightController.hpp>
 #include <msp/msp_msg.hpp>
 
+#include "agiros_msgs/Command.h"
+
 #include <Eigen/Geometry>
 
 double deg2rad(const double deg) {
@@ -133,21 +135,21 @@ public:
 
         // publisher
         imu_pub = nh.advertise<sensor_msgs::Imu>("imu/data", 1);
-        magn_pub = nh.advertise<sensor_msgs::MagneticField>("imu/mag", 1);
-        pose_stamped_pub = nh.advertise<geometry_msgs::PoseStamped>("local_position/pose", 1);
-        rpy_pub = nh.advertise<geometry_msgs::Vector3>("rpy", 1);
-        rc_in_pub = nh.advertise<mavros_msgs::RCIn>("rc/in", 1);
-        servo_pub = nh.advertise<mavros_msgs::RCOut>("rc/servo", 1);
-        motors_pub = nh.advertise<mavros_msgs::RCOut>("motors", 1);
+        //magn_pub = nh.advertise<sensor_msgs::MagneticField>("imu/mag", 1);
+        //pose_stamped_pub = nh.advertise<geometry_msgs::PoseStamped>("local_position/pose", 1);
+        //rpy_pub = nh.advertise<geometry_msgs::Vector3>("rpy", 1);
+        //rc_in_pub = nh.advertise<mavros_msgs::RCIn>("rc/in", 1);
+        //servo_pub = nh.advertise<mavros_msgs::RCOut>("rc/servo", 1);
+        //motors_pub = nh.advertise<mavros_msgs::RCOut>("motors", 1);
         battery_pub = nh.advertise<sensor_msgs::BatteryState>("battery",1);
-        heading_pub = nh.advertise<std_msgs::Float64>("global_position/compass_hdg",1);
-        altitude_pub = nh.advertise<std_msgs::Float64>("global_position/rel_alt",1);
-        sonar_altitude_pub = nh.advertise<std_msgs::Float64>("global_position/sonar_alt", 1);
+        //heading_pub = nh.advertise<std_msgs::Float64>("global_position/compass_hdg",1);
+        //altitude_pub = nh.advertise<std_msgs::Float64>("global_position/rel_alt",1);
+        //sonar_altitude_pub = nh.advertise<std_msgs::Float64>("global_position/sonar_alt", 1);
 
         // subscriber
         rc_in_sub = nh.subscribe("rc/override", 1, &MultiWiiNode::rc_override_AERT1234, this); // AERT1234
-        rc_in_sub2 = nh.subscribe("rc/override/raw", 1, &MultiWiiNode::rc_override_raw, this); // raw channel order
-        motor_control_sub = nh.subscribe("actuator_control", 1, &MultiWiiNode::motor_control, this);
+        //rc_in_sub2 = nh.subscribe("rc/override/raw", 1, &MultiWiiNode::rc_override_raw, this); // raw channel order
+        //motor_control_sub = nh.subscribe("actuator_control", 1, &MultiWiiNode::motor_control, this);
     }
 
     /**
@@ -230,14 +232,14 @@ public:
         mag_msg.magnetic_field.x = imu.mag[0];
         mag_msg.magnetic_field.y = imu.mag[1];
         mag_msg.magnetic_field.z = imu.mag[2];
-        magn_pub.publish(mag_msg);
+        //magn_pub.publish(mag_msg);
 
         ///////////////////////////////////
         /// heading from magnetic field
 
         std_msgs::Float64 heading;
         heading.data = rad2deg(std::atan2(double(imu.mag[0]), double(imu.mag[1])));
-        heading_pub.publish(heading);
+        //heading_pub.publish(heading);
     }
 
     void onAttitude(const msp::msg::Attitude &attitude) {
@@ -347,9 +349,9 @@ public:
     ////////////////////////////////////////////////////////////////////////////
     /// callbacks for subscribed messages
 
-    void rc_override_AERT1234(const mavros_msgs::OverrideRCIn &rc) {
-        fcu->setRc(rc.channels[0], rc.channels[1], rc.channels[2], rc.channels[3],
-                   rc.channels[4], rc.channels[5], rc.channels[6], rc.channels[7]);
+    void rc_override_AERT1234(const agiros_msgs::Command& rc) {
+        fcu->setRc(rc.bodyrates.x, rc.bodyrates.y, rc.bodyrates.z, rc.collective_thrust, 
+                   1500, 1500, 1500, 1500);
     }
 
     void rc_override_raw(const mavros_msgs::OverrideRCIn &rc) {
@@ -385,13 +387,13 @@ int main(int argc, char **argv) {
     std::cout<<"MSP ready"<<std::endl;
 
     node.fc().subscribe(&MultiWiiNode::onImu, &node);
-    node.fc().subscribe(&MultiWiiNode::onAttitude, &node);
-    node.fc().subscribe(&MultiWiiNode::onAltitude, &node);
-    node.fc().subscribe(&MultiWiiNode::onRc, &node);
-    node.fc().subscribe(&MultiWiiNode::onServo, &node);
-    node.fc().subscribe(&MultiWiiNode::onMotor, &node);
+    //node.fc().subscribe(&MultiWiiNode::onAttitude, &node);
+    //node.fc().subscribe(&MultiWiiNode::onAltitude, &node);
+    //node.fc().subscribe(&MultiWiiNode::onRc, &node);
+    //node.fc().subscribe(&MultiWiiNode::onServo, &node);
+    //node.fc().subscribe(&MultiWiiNode::onMotor, &node);
     node.fc().subscribe(&MultiWiiNode::onAnalog, &node);
-    node.fc().subscribe(&MultiWiiNode::onSonarAltitude, &node);
+    //node.fc().subscribe(&MultiWiiNode::onSonarAltitude, &node);
 
     // register callback for dynamic configuration
     // - update rates for MSP subscriber
