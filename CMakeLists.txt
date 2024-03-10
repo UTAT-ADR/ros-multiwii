@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   mavros_msgs
   tf
+  agiros_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -162,12 +163,21 @@ add_executable(multiwii_node src/multiwii_node.cpp)
 add_dependencies(multiwii_node ${PROJECT_NAME}_gencfg)
 add_dependencies(multiwii_node ${PROJECT_NAME}_gencpp)
 
+add_executable(betaflight_node src/betaflight_node.cpp)
+add_dependencies(betaflight_node ${PROJECT_NAME}_gencfg)
+add_dependencies(betaflight_node ${PROJECT_NAME}_gencpp)
+
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(multiwii_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(multiwii_node
+    ${catkin_LIBRARIES}
+    ${msp_LIBRARIES}
+)
+
+target_link_libraries(betaflight_node
     ${catkin_LIBRARIES}
     ${msp_LIBRARIES}
 )
@@ -193,6 +203,12 @@ target_link_libraries(multiwii_node
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
 install(TARGETS multiwii_node
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(TARGETS betaflight_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
