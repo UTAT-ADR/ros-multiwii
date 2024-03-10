@@ -3,6 +3,7 @@
 Dependency:
 ```
 https://github.com/UTAT-ADR/msp
+https://github.com/UTAT-ADR/agilicious
 ```
 
 This ROS nodes uses the MultiWii Serial Protocol (MSP) to communicate with [MultiWii](http://www.multiwii.com/wiki/index.php?title=Main_Page) and [Cleanflight](http://cleanflight.com/) based flight controllers.
