@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.0.0)
 project(multiwii)
 
-add_definitions(-std=c++14)
+add_definitions(-std=c++2a)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -28,6 +28,11 @@ link_directories(${msp_LIBRARY_DIRS})
 
 pkg_check_modules(Eigen REQUIRED eigen3)
 include_directories(${Eigen_INCLUDE_DIRS})
+
+find_package(PkgConfig)
+pkg_check_modules(agilib REQUIRED agilib)
+include_directories(${agilib_INCLUDE_DIRS})
+link_directories(${agilib_LIBRARY_DIRS})
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -146,6 +151,7 @@ catkin_package(
 include_directories(
   ${catkin_INCLUDE_DIRS}
   ${msp_INCLUDE_DIRS}
+  ${agilib_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -180,6 +186,7 @@ target_link_libraries(multiwii_node
 target_link_libraries(betaflight_node
     ${catkin_LIBRARIES}
     ${msp_LIBRARIES}
+    ${agilib_LIBRARIES}
 )
 
 #############

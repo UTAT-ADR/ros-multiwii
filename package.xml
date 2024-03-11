@@ -37,8 +37,10 @@
   <build_depend>sensor_msgs</build_depend>
   <build_depend>mavros_msgs</build_depend>
   <build_depend>agiros_msgs</build_depend>
+  <build_depend>agilib</build_depend>
   <build_depend>eigen</build_depend>
   <build_depend>tf</build_depend>
+  
 
   <exec_depend>msp</exec_depend>
   <exec_depend>roscpp</exec_depend>
