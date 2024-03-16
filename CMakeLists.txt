@@ -3,36 +3,41 @@ project(multiwii)
 
 add_definitions(-std=c++2a)
 
+find_package(catkin_simple REQUIRED)
+
+catkin_simple(ALL_DEPS_REQUIRED)
+
+find_package(Eigen3 3.3.4 QUIET)
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  message_generation
-  dynamic_reconfigure
-  std_msgs
-  geometry_msgs
-  sensor_msgs
-  mavros_msgs
-  tf
-  agiros_msgs
-)
+# find_package(catkin REQUIRED COMPONENTS
+#   roscpp
+#   message_generation
+#   dynamic_reconfigure
+#   std_msgs
+#   geometry_msgs
+#   sensor_msgs
+#   mavros_msgs
+#   tf
+#   agiros_msgs
+# )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
-find_package(PkgConfig)
-pkg_check_modules(msp REQUIRED msp)
-include_directories(${msp_INCLUDE_DIRS})
-link_directories(${msp_LIBRARY_DIRS})
+# find_package(PkgConfig)
+# pkg_check_modules(msp REQUIRED msp)
+# include_directories(${msp_INCLUDE_DIRS})
+# link_directories(${msp_LIBRARY_DIRS})
 
-pkg_check_modules(Eigen REQUIRED eigen3)
-include_directories(${Eigen_INCLUDE_DIRS})
+# pkg_check_modules(Eigen REQUIRED eigen3)
+# include_directories(${Eigen_INCLUDE_DIRS})
 
-find_package(PkgConfig)
-pkg_check_modules(agilib REQUIRED agilib)
-include_directories(${agilib_INCLUDE_DIRS})
-link_directories(${agilib_LIBRARY_DIRS})
+# pkg_check_modules(agilib REQUIRED agilib)
+# include_directories(${agilib_INCLUDE_DIRS})
+# link_directories(${agilib_LIBRARY_DIRS})
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -69,10 +74,10 @@ link_directories(${agilib_LIBRARY_DIRS})
 #   Message1.msg
 #   Message2.msg
 # )
-add_message_files(
-    FILES
-    MSPRawMessage.msg
-)
+#add_message_files(
+#    FILES
+#    MSPRawMessage.msg
+#)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -80,11 +85,11 @@ add_message_files(
 #   Service1.srv
 #   Service2.srv
 # )
-add_service_files(
-    FILES
-    ReceiveMSPRawMessage.srv
-    SendMSPRawMessage.srv
-)
+#add_service_files(
+#    FILES
+#    ReceiveMSPRawMessage.srv
+#    SendMSPRawMessage.srv
+#)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -98,9 +103,9 @@ add_service_files(
 #   DEPENDENCIES
 #   std_msgs  # Or other packages containing msgs
 # )
-generate_messages(
-    DEPENDENCIES
-)
+# generate_messages(
+#     DEPENDENCIES
+# )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -121,9 +126,9 @@ generate_messages(
 #   cfg/DynReconf1.cfg
 #   cfg/DynReconf2.cfg
 # )
-generate_dynamic_reconfigure_options(
-    cfg/UpdateRates.cfg
-)
+# generate_dynamic_reconfigure_options(
+#     cfg/UpdateRates.cfg
+# )
 
 ###################################
 ## catkin specific configuration ##
@@ -136,8 +141,8 @@ generate_dynamic_reconfigure_options(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES multiwii
-    CATKIN_DEPENDS message_runtime
+    #LIBRARIES agilib
+    CATKIN_DEPENDS
 #  DEPENDS system_lib
 )
 
@@ -150,8 +155,7 @@ catkin_package(
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
-  ${msp_INCLUDE_DIRS}
-  ${agilib_INCLUDE_DIRS}
+  ${EIGEN3_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -165,28 +169,26 @@ include_directories(
 # add_dependencies(multiwii ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-add_executable(multiwii_node src/multiwii_node.cpp)
-add_dependencies(multiwii_node ${PROJECT_NAME}_gencfg)
-add_dependencies(multiwii_node ${PROJECT_NAME}_gencpp)
+# add_executable(multiwii_node src/multiwii_node.cpp)
+# add_dependencies(multiwii_node ${PROJECT_NAME}_gencfg)
+# add_dependencies(multiwii_node ${PROJECT_NAME}_gencpp)
 
-add_executable(betaflight_node src/betaflight_node.cpp)
-add_dependencies(betaflight_node ${PROJECT_NAME}_gencfg)
-add_dependencies(betaflight_node ${PROJECT_NAME}_gencpp)
+cs_add_executable(betaflight_node src/betaflight_node.cpp)
+# cs_add_dependencies(betaflight_node ${PROJECT_NAME}_gencfg)
+# cs_add_dependencies(betaflight_node ${PROJECT_NAME}_gencpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(multiwii_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(multiwii_node
-    ${catkin_LIBRARIES}
-    ${msp_LIBRARIES}
-)
+# target_link_libraries(multiwii_node
+#     ${catkin_LIBRARIES}
+#     ${msp_LIBRARIES}
+# )
 
 target_link_libraries(betaflight_node
     ${catkin_LIBRARIES}
-    ${msp_LIBRARIES}
-    ${agilib_LIBRARIES}
 )
 
 #############
@@ -209,17 +211,17 @@ target_link_libraries(betaflight_node
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
-install(TARGETS multiwii_node
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
+# install(TARGETS multiwii_node
+#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+# )
 
-install(TARGETS betaflight_node
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
+# install(TARGETS betaflight_node
+#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+# )
 
 ## Mark cpp header files for installation
 # install(DIRECTORY include/${PROJECT_NAME}/
@@ -235,14 +237,14 @@ install(TARGETS betaflight_node
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
 
-install(DIRECTORY launch
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
+# install(DIRECTORY launch
+#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+# )
 
-install(DIRECTORY cfg
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-  FILES_MATCHING PATTERN "*.yaml"
-)
+# install(DIRECTORY cfg
+#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+#   FILES_MATCHING PATTERN "*.yaml"
+# )
 
 #############
 ## Testing ##
@@ -256,3 +258,5 @@ install(DIRECTORY cfg
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+cs_install()
+cs_export()
