@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(multiwii)
-
-add_definitions(-std=c++2a)
+set(CMAKE_CXX_STANDARD 20)
 
 find_package(catkin_simple REQUIRED)
 
@@ -188,7 +187,7 @@ cs_add_executable(betaflight_node src/betaflight_node.cpp)
 # )
 
 target_link_libraries(betaflight_node
-    ${catkin_LIBRARIES}
+    ${catkin_LIBRARIES} -lstdc++fs
 )
 
 #############
