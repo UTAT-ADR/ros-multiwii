@@ -18,13 +18,6 @@
 
 #include <agilib/bridge/thrust_map.hpp>
 
-double deg2rad(const double deg) {
-    return deg/180.0 * M_PI;
-}
-
-double rad2deg(const double rad) {
-    return rad/M_PI * 180.0;
-}
 
 class BetaflightNode {
 private:
@@ -84,9 +77,9 @@ public:
             ROS_INFO("Successfully loaded thrust map.");
         }
 
-        if (!nh.getParam("quad_mass", quad_mass)) {
-            ROS_ERROR("Parameter 'quad_mass' not set.");
-        }
+        // if (!nh.getParam("quad_mass", quad_mass)) {
+        //     ROS_ERROR("Parameter 'quad_mass' not set.");
+        // }
 
         if (!nh.getParam("max_rate", max_rate)) {
             ROS_ERROR("Parameter 'max_rate' not set.");
@@ -135,7 +128,7 @@ public:
     void commandCallBack(const agiros_msgs::Command& cmd) {
         msp::msg::SetRawRc rc(msp::FirmwareVariant::BAFL);
 
-        const double thrust_out = thrustmap.map(cmd.collective_thrust * quad_mass, voltage);
+        const double thrust_out = thrustmap.map(cmd.collective_thrust, voltage);
 
         // Catch mapping error for zero thrust.
         const double thrust_apply =

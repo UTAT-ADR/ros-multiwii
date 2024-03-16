@@ -1,0 +1,13 @@
+<launch>
+    <node name="betaflight_node" pkg="multiwii" type="betaflight_node">
+        <param name="device" value="/dev/ttyACM0"/>
+        <!-- default cleanflight/betaflight baudrate is 115200 -->
+        <!-- increase serial baudrate and cleanflight's "serial_update_rate_hz"
+             to enable higher MSP update rates -->
+        <param name="baudrate" value="1000000"/>
+        <param name="command_topic" value="adr"/>
+        <param name="thrust_map_file" value="thrust_map.csv"/>
+        <param name="max_rate" value="500"/>
+        <!--rosparam command="load" file="$(find multiwii)/cfg/UpdateRates_RPiZero.yaml"/-->
+    </node>
+</launch>
